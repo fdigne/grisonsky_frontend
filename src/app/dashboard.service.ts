@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import {Renter} from './domains/Renter';
 import { Observable } from 'rxjs/Observable';
+import { Rent } from './domains/Rent';
 
 @Injectable()
 export class DashboardService {
@@ -12,8 +13,8 @@ export class DashboardService {
   constructor(
     private http: HttpClient) { }
 
-  /** GET renters */
-getRenters (): Observable<Renter[]> {
-  return this.http.get<Renter[]>(this.grisonskyURL+'/renters')
+  /** GET rents */
+getRents (): Observable<Rent[]> {
+  return this.http.get<Rent[]>(this.grisonskyURL+'/rent/all')
 }
 }

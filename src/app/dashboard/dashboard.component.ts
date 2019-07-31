@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Renter } from '../domains/Renter';
 import { DashboardService } from '../dashboard.service';
+import { Rent } from '../domains/Rent';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Client } from '../domains/Client';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,18 +10,22 @@ import { DashboardService } from '../dashboard.service';
   styleUrls: ['./dashboard.component.css'],
   providers: [DashboardService]
 })
+
 export class DashboardComponent implements OnInit {
 
-  renters : Renter[];
+  rents : Rent[];
+  displayedColumns: string[] = ['Loueur', 'Appartement', 'Date entrée', 'Date sortie', 'Locataire', 'Téléphone', 'Nombre', 'Ménage', 'Site', 'Prix', 'Commentaires'];
 
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit() {
-    this.getRenters();
+    this.getRents();
   }
 
-  getRenters(): void {
-    this.dashboardService.getRenters().subscribe(renters => this.renters = renters);
+  getRents(): void {
+    this.dashboardService.getRents().subscribe(rents => {
+      console.log(rents);
+      this.rents = rents});
   }
 
 }
