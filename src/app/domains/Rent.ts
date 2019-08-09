@@ -12,4 +12,6 @@ export class Rent {
     price: number;
     comments: string;
     renter: Renter;
+    appartment: string;
+    parking: string;
 }
