@@ -13,5 +13,5 @@ export class Rent {
     comments: string;
     renter: Renter;
     appartment: string;
-    parking: string;
+    parking: boolean;
 }
