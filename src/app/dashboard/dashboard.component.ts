@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../dashboard.service';
 import { Rent } from '../domains/Rent';
 import { FormGroup, Validators, FormBuilder }  from '@angular/forms';
 import { Client } from '../domains/Client';
 import { Period } from '../domains/Period';
 import { Renter } from '../domains/Renter';
+import {MatSort} from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -21,11 +26,14 @@ export class DashboardComponent implements OnInit {
   renters: Renter[];
   renter: Renter;
   appartments: String[];
+
+  dataSource: MatTableDataSource<Rent> = new MatTableDataSource();
   
-  displayedColumns: string[] = ['Date Entrée', 'Date Sortie', 'Appartement', 'Locataire', 'Téléphone', 'Nombre', 'Ménage', 'Parking', 'Site', 'Prix', 'Commentaires', 'Delete'];
+  displayedColumns: string[];
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayNewRentForm : boolean;
   
-  constructor(private dashboardService: DashboardService, fb: FormBuilder) { 
+  constructor(private dashboardService: DashboardService, fb: FormBuilder, public dialog: MatDialog) { 
     this.newRentForm = fb.group({
       appartment: ["", Validators.required],
       renter: ["", Validators.required],
@@ -47,8 +55,9 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.displayNewRentForm = false;
     localStorage.setItem("user", "jules");
-    this.getRents();
     this.getRenter();
+    this.dataSource.sort = this.sort;
+
   }
 
   addNewRent() {
@@ -59,7 +68,7 @@ export class DashboardComponent implements OnInit {
     this.displayNewRentForm = false;
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
     this.dashboardService.saveRent(rentValue).subscribe(data => {
-      this.getRents();
+      this.getRents(this.renter.id);
     });
   }
 
@@ -69,8 +78,8 @@ export class DashboardComponent implements OnInit {
     let clientValue = new Client();
 
     //Period values
-    periodValue.startDate = new Date(form.startDate);
-    periodValue.endDate = new Date(form.endDate);
+    periodValue.startDate = new Date(form.startDate + ' ' + form.startTime);
+    periodValue.endDate = new Date(form.endDate + ' ' + form.endTime);
 
     //Client values
     clientValue.name = form.client;
@@ -96,12 +105,23 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteRent(rentId: number) : void {
-    this.dashboardService.deleteRent(rentId).subscribe(() => {
-      this.getRents();
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Es-tu sûr de vouloir supprimer cette location ?"
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.dashboardService.deleteRent(rentId).subscribe(() => {
+          this.getRents(this.renter.id);
+        });
+      }
+    });
+    
   }
-  getRents(): void {
-    this.dashboardService.getRents().subscribe(rents => {
+  getRents(renterId : number): void {
+    this.dashboardService.getRents(renterId).subscribe(rents => {
+      this.dataSource = new MatTableDataSource(rents);
+      this.dataSource.sort = this.sort;
       this.rents = rents});
   }
 
@@ -109,6 +129,17 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getRenter(localStorage.getItem("user")).subscribe(renter => {
       this.renter = renter;
       this.appartments = renter.appartments.split(";");
+      this.getDisplayedColumns();
+      this.getRents(renter.id);
     });
+  }
+
+  getDisplayedColumns(): void {
+    if (this.renter.admin == true) {
+      this.displayedColumns = ['startDate', 'endDate','renter', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
+    }
+    else {
+      this.displayedColumns = ['startDate', 'endDate', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
+    }
   }
 }

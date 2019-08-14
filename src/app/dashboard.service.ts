@@ -14,8 +14,8 @@ export class DashboardService {
     private http: HttpClient) { }
 
   /** GET rents */
-  getRents(): Observable<Rent[]> {
-    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/all')
+  getRents(renterId: number): Observable<Rent[]> {
+    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/all/'+renterId)
   }
 
   /** GET renter */

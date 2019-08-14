@@ -1,83 +1,83 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<table mat-table [dataSource]="rents" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
   <!-- Date entrée Column -->
-  <ng-container matColumnDef="Date Entrée">
-    <th mat-header-cell *matHeaderCellDef>Date Entrée</th>
+  <ng-container matColumnDef="startDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Entrée</th>
     <td mat-cell *matCellDef="let rent"> {{rent.period.startDate}} </td>
   </ng-container>
 
   <!-- Date sortie Column -->
-  <ng-container matColumnDef="Date Sortie">
-    <th mat-header-cell *matHeaderCellDef>Date Sortie</th>
+  <ng-container matColumnDef="endDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Sortie</th>
     <td mat-cell *matCellDef="let rent"> {{rent.period.endDate}} </td>
   </ng-container>
 
   <!-- Loueur Column -->
-  <ng-container matColumnDef="Loueur">
-    <th mat-header-cell *matHeaderCellDef>Loueur</th>
+  <ng-container matColumnDef="renter" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Loueur</th>
     <td mat-cell *matCellDef="let rent"> {{rent.renter.name}} </td>
   </ng-container>
 
   <!-- Appartment Column -->
-  <ng-container matColumnDef="Appartement">
-    <th mat-header-cell *matHeaderCellDef>Appartement</th>
+  <ng-container matColumnDef="appartment">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Appartement</th>
     <td mat-cell *matCellDef="let rent"> {{rent.appartment}} </td>
   </ng-container>
 
   <!-- Locataire Column -->
-  <ng-container matColumnDef="Locataire">
-    <th mat-header-cell *matHeaderCellDef>Locataire</th>
+  <ng-container matColumnDef="client">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Locataire</th>
     <td mat-cell *matCellDef="let rent"> {{rent.client.name}} {{rent.client.firstName}} </td>
   </ng-container>
 
   <!-- Téléphone Column -->
-  <ng-container matColumnDef="Téléphone">
-    <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+  <ng-container matColumnDef="phoneNumber">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Téléphone</th>
     <td mat-cell *matCellDef="let rent"> {{rent.client.phoneNumber}}</td>
   </ng-container>
 
   <!-- Nb Occupants Column -->
-  <ng-container matColumnDef="Nombre">
-    <th mat-header-cell *matHeaderCellDef>Nb Occupants</th>
+  <ng-container matColumnDef="nbClient">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nb Occupants</th>
     <td mat-cell *matCellDef="let rent"> {{rent.nbClient}}</td>
   </ng-container>
 
   <!-- Ménage Column -->
-  <ng-container matColumnDef="Ménage">
-    <th mat-header-cell *matHeaderCellDef>Ménage</th>
+  <ng-container matColumnDef="cleaning">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Ménage</th>
     <td mat-cell *matCellDef="let rent"> {{rent.cleaning}}</td>
   </ng-container>
 
   <!-- Parking Column -->
-  <ng-container matColumnDef="Parking">
-    <th mat-header-cell *matHeaderCellDef>Parking</th>
+  <ng-container matColumnDef="parking">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Parking</th>
     <td mat-cell *matCellDef="let rent"> {{rent.parking}}</td>
   </ng-container>
 
   <!--  Column Site-->
-  <ng-container matColumnDef="Site">
-    <th mat-header-cell *matHeaderCellDef>Site</th>
+  <ng-container matColumnDef="site">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Site</th>
     <td mat-cell *matCellDef="let rent"> {{rent.site}}</td>
   </ng-container>
 
   <!--  Column Prix-->
-  <ng-container matColumnDef="Prix">
-    <th mat-header-cell *matHeaderCellDef>Prix</th>
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Prix</th>
     <td mat-cell *matCellDef="let rent"> {{rent.price}}</td>
   </ng-container>
 
   <!--  Column Commentaires-->
-  <ng-container matColumnDef="Commentaires">
-    <th mat-header-cell *matHeaderCellDef>Commentaires</th>
+  <ng-container matColumnDef="comments">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Commentaires</th>
     <td mat-cell *matCellDef="let rent"> {{rent.comments}}</td>
   </ng-container>
 
   <!--  Column Actions-->
   <ng-container matColumnDef="Delete">
-    <th mat-header-cell *matHeaderCellDef></th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
     <td mat-cell *matCellDef="let rent">
       <button mat-icon-button (click)="deleteRent(rent.id)">
         <mat-icon>delete</mat-icon>

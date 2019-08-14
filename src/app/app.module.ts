@@ -18,11 +18,13 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatSelectModule} from '@angular/material/select';
-
+import {MatSortModule} from '@angular/material';
+import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component'
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,11 @@ import {MatSelectModule} from '@angular/material/select';
     MatIconModule,
     MatDialogModule,
     NgxMaterialTimepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSortModule
+  ],
+  entryComponents: [
+    ConfirmationDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
