@@ -19,12 +19,18 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSortModule} from '@angular/material';
-import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component'
+import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-dialog.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { LoginComponent } from './login/login.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +50,9 @@ import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-di
     MatDialogModule,
     NgxMaterialTimepickerModule,
     MatSelectModule,
-    MatSortModule
+    MatSortModule,
+    MatCheckboxModule,
+    MatToolbarModule
   ],
   entryComponents: [
     ConfirmationDialogComponent

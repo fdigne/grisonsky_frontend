@@ -9,6 +9,7 @@ import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { Modification } from '../domains/Modification';
 
 
 @Component({
@@ -26,13 +27,16 @@ export class DashboardComponent implements OnInit {
   renters: Renter[];
   renter: Renter;
   appartments: String[];
+  lastModification: Modification;
 
   dataSource: MatTableDataSource<Rent> = new MatTableDataSource();
   
   displayedColumns: string[];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayNewRentForm : boolean;
-  
+  cleaningChecked : boolean = true;
+  parkingChecked : boolean = false;
+
   constructor(private dashboardService: DashboardService, fb: FormBuilder, public dialog: MatDialog) { 
     this.newRentForm = fb.group({
       appartment: ["", Validators.required],
@@ -59,6 +63,12 @@ export class DashboardComponent implements OnInit {
     this.dataSource.sort = this.sort;
 
   }
+  getLastModification() {
+    this.dashboardService.getLastModification().subscribe(modification => {
+      modification.date = new Date(modification.date);
+      this.lastModification = modification;
+    });
+  }
 
   addNewRent() {
     this.displayNewRentForm = true;
@@ -67,7 +77,7 @@ export class DashboardComponent implements OnInit {
   saveNewRent() {
     this.displayNewRentForm = false;
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
-    this.dashboardService.saveRent(rentValue).subscribe(data => {
+    this.dashboardService.saveRent(rentValue, this.renter.id).subscribe(data => {
       this.getRents(this.renter.id);
     });
   }
@@ -90,10 +100,10 @@ export class DashboardComponent implements OnInit {
     rentValue.period = periodValue;
     rentValue.renter = this.renter;
     rentValue.appartment = form.appartment;
-    rentValue.cleaning = form.cleaning.toLowerCase() == 'true' ? true : false;
+    rentValue.cleaning = form.cleaning;
     rentValue.comments = form.comments;
     rentValue.nbClient = form.nbClient;
-    rentValue.parking = form.parking.toLowerCase() == 'true' ? true : false;
+    rentValue.parking = form.parking;
     rentValue.price = form.price;
     rentValue.site = form.site;
     return rentValue;
@@ -111,7 +121,7 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.dashboardService.deleteRent(rentId).subscribe(() => {
+        this.dashboardService.deleteRent(rentId, this.renter.id).subscribe(() => {
           this.getRents(this.renter.id);
         });
       }
@@ -121,8 +131,19 @@ export class DashboardComponent implements OnInit {
   getRents(renterId : number): void {
     this.dashboardService.getRents(renterId).subscribe(rents => {
       this.dataSource = new MatTableDataSource(rents);
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'startDate': return new Date(item.period.startDate);
+          case 'endDate': return new Date(item.period.endDate);
+          case 'renter': return item.renter.name;
+          case 'client': return item.client.name;
+          default: return item[property];
+        }
+      };
       this.dataSource.sort = this.sort;
-      this.rents = rents});
+      this.rents = rents
+      this.getLastModification();
+    });
   }
 
   getRenter(): void {

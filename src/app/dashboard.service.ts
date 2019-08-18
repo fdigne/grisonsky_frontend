@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Rent } from './domains/Rent';
 import { Observable } from 'rxjs';
 import { Renter } from './domains/Renter';
+import { Modification } from './domains/Modification';
 
 @Injectable()
 export class DashboardService {
@@ -23,13 +24,18 @@ export class DashboardService {
     return this.http.get<Renter>(this.grisonskyURL + '/renter/'+name);
   }
 
+  /** GET Last Modification */
+  getLastModification(): Observable<Modification> {
+    return this.http.get<Modification>(this.grisonskyURL +'/rent/lastmodif');
+  }
+
   /** POST rent */
-  saveRent(rent: Rent): Observable<Rent> {
-    return this.http.post<Rent>(this.grisonskyURL + '/rent/save', rent)
+  saveRent(rent: Rent, userId: number): Observable<Rent> {
+    return this.http.post<Rent>(this.grisonskyURL + '/rent/save/'+userId, rent)
   }
 
   /** DELETE rent */
-  deleteRent(rentId: number): Observable<String> {
-    return this.http.delete<any>(this.grisonskyURL + '/rent/'+rentId);
+  deleteRent(rentId: number, userId: number): Observable<String> {
+    return this.http.delete<any>(this.grisonskyURL + '/rent/'+rentId+'/'+userId);
   }
 }

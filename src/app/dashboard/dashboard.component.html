@@ -1,4 +1,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<mat-label *ngIf="renter.admin == true">Dernière modification par {{lastModification.renter.name}} le {{lastModification.date | date:"dd/MM/yyyy HH:mm"}} : {{lastModification.message}}</mat-label>
+<br/><br/>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
@@ -16,7 +18,7 @@
   </ng-container>
 
   <!-- Loueur Column -->
-  <ng-container matColumnDef="renter" >
+  <ng-container matColumnDef="renter">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Loueur</th>
     <td mat-cell *matCellDef="let rent"> {{rent.renter.name}} </td>
   </ng-container>
@@ -30,7 +32,7 @@
   <!-- Locataire Column -->
   <ng-container matColumnDef="client">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Locataire</th>
-    <td mat-cell *matCellDef="let rent"> {{rent.client.name}} {{rent.client.firstName}} </td>
+    <td mat-cell *matCellDef="let rent"> {{rent.client.name}}</td>
   </ng-container>
 
   <!-- Téléphone Column -->
@@ -48,13 +50,17 @@
   <!-- Ménage Column -->
   <ng-container matColumnDef="cleaning">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Ménage</th>
-    <td mat-cell *matCellDef="let rent"> {{rent.cleaning}}</td>
+    <td mat-cell *matCellDef="let rent">
+      <mat-checkbox color="primary" [checked]="rent.cleaning"></mat-checkbox>
+    </td>
   </ng-container>
 
   <!-- Parking Column -->
   <ng-container matColumnDef="parking">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Parking</th>
-    <td mat-cell *matCellDef="let rent"> {{rent.parking}}</td>
+    <td mat-cell *matCellDef="let rent">
+      <mat-checkbox color="primary" [checked]="rent.parking"></mat-checkbox>
+    </td>
   </ng-container>
 
   <!--  Column Site-->
@@ -133,12 +139,12 @@
           </mat-form-field>
         </div>
         <div>
-            <mat-form-field>
-              <input matInput placeholder="Heure de sortie" [ngxTimepicker]="fullEndTime" [format]="24" [value]="'11:00'"
-                formControlName="endTime" readonly>
-              <ngx-material-timepicker #fullEndTime></ngx-material-timepicker>
-            </mat-form-field>
-          </div>
+          <mat-form-field>
+            <input matInput placeholder="Heure de sortie" [ngxTimepicker]="fullEndTime" [format]="24" [value]="'11:00'"
+              formControlName="endTime" readonly>
+            <ngx-material-timepicker #fullEndTime></ngx-material-timepicker>
+          </mat-form-field>
+        </div>
         <div>
           <mat-form-field>
             <input matInput formControlName="client" placeholder="Locataire" required />
@@ -155,14 +161,12 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field>
-            <input matInput formControlName="cleaning" placeholder="Ménage" required />
-          </mat-form-field>
+          <mat-checkbox color="primary" [(ngModel)]="cleaningChecked" formControlName="cleaning" required>Ménage
+          </mat-checkbox>
         </div>
         <div>
-          <mat-form-field>
-            <input matInput formControlName="parking" placeholder="Parking" required />
-          </mat-form-field>
+          <mat-checkbox color="primary" [(ngModel)]="parkingChecked" formControlName="parking" required>Parking
+          </mat-checkbox>
         </div>
         <div>
           <mat-form-field>
@@ -176,7 +180,8 @@
         </div>
         <div>
           <mat-form-field>
-            <input matInput formControlName="comments" placeholder="Commentaires" required />
+            <textarea matInput formControlName="comments" placeholder="Commentaires" cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
         </div>
         <button mat-raised-button type="Save">Save</button>
