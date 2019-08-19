@@ -1,1 +1,28 @@
-<p>login works!</p>
+<div style="text-align:center;">
+<mat-card class="card">
+    <mat-card-header style = "justify-content: center; ">
+        <mat-card-title>Identification</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="loginForm" (submit)="login()">
+            <div>
+                <mat-form-field>
+                    <input matInput formControlName="login" placeholder="Nom d'utilisateur" required />
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field>
+                    <input matInput formControlName="password" placeholder="Password" required />
+                </mat-form-field>
+            </div>
+            <div>
+            <button mat-raised-button type="submit">Login</button>
+            </div>
+            <br/>
+            <div>
+            <label *ngIf="displayErrorMessage == true" style="color: darkred;">{{errorMessage}}</label>
+            </div>
+        </form>
+    </mat-card-content>
+    </mat-card>
+    </div>

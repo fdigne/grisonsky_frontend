@@ -5,11 +5,12 @@ import { Rent } from './domains/Rent';
 import { Observable } from 'rxjs';
 import { Renter } from './domains/Renter';
 import { Modification } from './domains/Modification';
+import { Login } from './domains/Login';
 
 @Injectable()
 export class DashboardService {
 
-  private grisonskyURL = 'http://localhost:90';  // URL to web api
+  private grisonskyURL = 'http://localhost:9090';  // URL to web api
 
   constructor(
     private http: HttpClient) { }
@@ -27,6 +28,11 @@ export class DashboardService {
   /** GET Last Modification */
   getLastModification(): Observable<Modification> {
     return this.http.get<Modification>(this.grisonskyURL +'/rent/lastmodif');
+  }
+
+  /** POST login */
+  login(loginValue : Login): Observable<Renter> {
+    return this.http.post<Renter>(this.grisonskyURL + '/renter/login', loginValue);
   }
 
   /** POST rent */

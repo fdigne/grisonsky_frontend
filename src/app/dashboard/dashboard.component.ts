@@ -58,10 +58,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.displayNewRentForm = false;
-    localStorage.setItem("user", "jules");
     this.getRenter();
     this.dataSource.sort = this.sort;
-
   }
   getLastModification() {
     this.dashboardService.getLastModification().subscribe(modification => {
