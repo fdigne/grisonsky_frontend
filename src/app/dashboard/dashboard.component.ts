@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayNewRentForm : boolean;
+  displayBillCard : boolean;
   cleaningChecked : boolean = true;
   parkingChecked : boolean = false;
 
@@ -58,6 +59,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.displayNewRentForm = false;
+    this.displayBillCard = false;
     this.getRenter();
     this.dataSource.sort = this.sort;
   }
@@ -69,6 +71,7 @@ export class DashboardComponent implements OnInit {
   }
 
   addNewRent() {
+    this.displayBillCard = false;
     this.displayNewRentForm = true;
   }
 
@@ -160,5 +163,10 @@ export class DashboardComponent implements OnInit {
     else {
       this.displayedColumns = ['startDate', 'endDate', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
     }
+  }
+
+  displayBill(): void {
+    this.displayNewRentForm = false;
+    this.displayBillCard = true;
   }
 }

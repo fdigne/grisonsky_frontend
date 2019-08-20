@@ -1,6 +1,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<mat-label *ngIf="renter.admin == true">Dernière modification par {{lastModification.renter.name}} le {{lastModification.date | date:"dd/MM/yyyy HH:mm"}} : {{lastModification.message}}</mat-label>
-<br/><br/>
+<mat-label *ngIf="renter.admin == true">Dernière modification par {{lastModification.renter.name}} le
+  {{lastModification.date | date:"dd/MM/yyyy HH:mm"}} : {{lastModification.message}}</mat-label>
+<br /><br />
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
@@ -97,7 +98,12 @@
 </table>
 <br />
 <div>
-  <button mat-fab color="primary" (click)="addNewRent()" type="button">+</button>
+  <button mat-fab color="primary" (click)="addNewRent()" type="button">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-fab color="primary" (click)="displayBill()" type="button">
+    <mat-icon>euro_symbol</mat-icon>
+  </button>
 </div>
 <br />
 <div *ngIf="displayNewRentForm == true">
@@ -187,6 +193,24 @@
         <button mat-raised-button type="Save">Save</button>
         <button mat-raised-button (click)="cancelNewRent()">Cancel</button>
       </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div>
+  <mat-card class="card">
+    <mat-card-header style="justify-content: center; ">
+      <mat-card-title>Ardoise</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div>
+        <label>Ménage : </label>
+      </div>
+      <div>
+          <label>Frais de service : </label>
+      </div>
+      <div>
+          <label>Total : </label>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
