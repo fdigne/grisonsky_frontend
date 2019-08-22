@@ -1,6 +1,8 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<mat-label *ngIf="renter.admin == true">Dernière modification par {{lastModification.renter.name}} le
+<div *ngIf="displayLastModifMessage == true">
+<mat-label>Dernière modification par {{lastModification.renter.name}} le
   {{lastModification.date | date:"dd/MM/yyyy HH:mm"}} : {{lastModification.message}}</mat-label>
+  </div>
 <br /><br />
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
@@ -196,20 +198,20 @@
     </mat-card-content>
   </mat-card>
 </div>
-<div>
+<div *ngIf="displayBillCard == true">
   <mat-card class="card">
     <mat-card-header style="justify-content: center; ">
       <mat-card-title>Ardoise</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div>
-        <label>Ménage : </label>
+        <label>Ménage : {{renter.bill.cleaning}}€</label>
       </div>
       <div>
-          <label>Frais de service : </label>
+          <label>Frais de service : {{renter.bill.service}}€</label>
       </div>
       <div>
-          <label>Total : </label>
+          <label>Total : {{renter.bill.service + renter.bill.cleaning}}€</label>
       </div>
     </mat-card-content>
   </mat-card>

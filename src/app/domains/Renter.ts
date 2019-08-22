@@ -7,5 +7,4 @@ export class Renter {
   appartments: string;
   admin: boolean;
   bill: Bill;
-  billLastPayed: Date;
 }

@@ -37,6 +37,7 @@ export class DashboardComponent implements OnInit {
   displayBillCard : boolean;
   cleaningChecked : boolean = true;
   parkingChecked : boolean = false;
+  displayLastModifMessage : boolean = false;
 
   constructor(private dashboardService: DashboardService, fb: FormBuilder, public dialog: MatDialog) { 
     this.newRentForm = fb.group({
@@ -80,6 +81,7 @@ export class DashboardComponent implements OnInit {
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
     this.dashboardService.saveRent(rentValue, this.renter.id).subscribe(data => {
       this.getRents(this.renter.id);
+      this.getRenter();
     });
   }
 
@@ -124,6 +126,9 @@ export class DashboardComponent implements OnInit {
       if(result) {
         this.dashboardService.deleteRent(rentId, this.renter.id).subscribe(() => {
           this.getRents(this.renter.id);
+          this.getRenter();
+          this.displayBillCard = false;
+          this.displayNewRentForm = false;
         });
       }
     });
@@ -150,6 +155,7 @@ export class DashboardComponent implements OnInit {
   getRenter(): void {
     this.dashboardService.getRenter(localStorage.getItem("user")).subscribe(renter => {
       this.renter = renter;
+      this.displayLastModifMessage = renter.admin;
       this.appartments = renter.appartments.split(";");
       this.getDisplayedColumns();
       this.getRents(renter.id);
