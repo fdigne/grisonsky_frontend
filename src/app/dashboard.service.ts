@@ -25,6 +25,16 @@ export class DashboardService {
     return this.http.get<Renter>(this.grisonskyURL + '/renter/'+name);
   }
 
+ /** PUT PAY rent */
+ payRent(rent: Rent): Observable<Rent> {
+  return this.http.put<Rent>(this.grisonskyURL + '/rent',rent);
+} 
+
+  /** GET renters */
+  getRenters(renter : Renter): Observable<Renter[]> {
+    return this.http.get<Renter[]>(this.grisonskyURL + '/renter/all/'+renter.id);
+  }
+
   /** GET Last Modification */
   getLastModification(): Observable<Modification> {
     return this.http.get<Modification>(this.grisonskyURL +'/rent/lastmodif');

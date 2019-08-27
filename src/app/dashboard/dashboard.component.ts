@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayNewRentForm : boolean;
   displayBillCard : boolean;
+  displayBillCardAdmin: boolean;
   cleaningChecked : boolean = true;
   parkingChecked : boolean = false;
   displayLastModifMessage : boolean = false;
@@ -61,6 +62,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.displayNewRentForm = false;
     this.displayBillCard = false;
+    this.displayBillCardAdmin = false;
     this.getRenter();
     this.dataSource.sort = this.sort;
   }
@@ -73,6 +75,7 @@ export class DashboardComponent implements OnInit {
 
   addNewRent() {
     this.displayBillCard = false;
+    this.displayBillCardAdmin = false;
     this.displayNewRentForm = true;
   }
 
@@ -159,6 +162,11 @@ export class DashboardComponent implements OnInit {
       this.appartments = renter.appartments.split(";");
       this.getDisplayedColumns();
       this.getRents(renter.id);
+      if (renter.admin == true) {
+        this.dashboardService.getRenters(renter).subscribe(renters => {
+          this.renters = renters;
+        });
+      }
     });
   }
 
@@ -173,6 +181,23 @@ export class DashboardComponent implements OnInit {
 
   displayBill(): void {
     this.displayNewRentForm = false;
-    this.displayBillCard = true;
+    if (this.renter.admin == true) {
+      this.displayBillCard = false;
+      this.displayBillCardAdmin = true;
+    }
+    else {
+      this.displayBillCard = true;
+      this.displayBillCardAdmin = false;
+    }
+  }
+
+  payRent(rent: Rent): void {
+    this.dashboardService.payRent(rent).subscribe(rent => {
+      this.getRenter();
+    })
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

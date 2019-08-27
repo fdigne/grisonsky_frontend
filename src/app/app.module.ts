@@ -23,6 +23,7 @@ import {ConfirmationDialogComponent} from './confirmation-dialog/confirmation-di
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { LoginComponent } from './login/login.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { LoginComponent } from './login/login.component';
     MatSelectModule,
     MatSortModule,
     MatCheckboxModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatGridListModule
   ],
   entryComponents: [
     ConfirmationDialogComponent

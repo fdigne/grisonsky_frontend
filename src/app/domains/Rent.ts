@@ -14,4 +14,5 @@ export class Rent {
     renter: Renter;
     appartment: string;
     parking: boolean;
+    paid: boolean;
 }

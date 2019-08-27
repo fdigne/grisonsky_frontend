@@ -4,6 +4,9 @@
   {{lastModification.date | date:"dd/MM/yyyy HH:mm"}} : {{lastModification.message}}</mat-label>
   </div>
 <br /><br />
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
@@ -90,6 +93,10 @@
     <td mat-cell *matCellDef="let rent">
       <button mat-icon-button (click)="deleteRent(rent.id)">
         <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="payRent(rent)" *ngIf="renter.admin == true ">
+        <mat-icon *ngIf="rent.paid == false">euro_symbol</mat-icon>
+        <mat-icon *ngIf="rent.paid == true">cancel</mat-icon>
       </button>
     </td>
   </ng-container>
@@ -215,4 +222,26 @@
       </div>
     </mat-card-content>
   </mat-card>
+</div>
+<div *ngIf="displayBillCardAdmin == true">
+  <mat-grid-list cols="3" rowHeight="100px">
+    <mat-grid-tile *ngFor="let r of renters">
+      <mat-card class="card"  style="width: 100%">
+        <mat-card-header style="justify-content: center; ">
+          <mat-card-title>{{r.name}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div>
+            <label>Ménage : {{r.bill.cleaning}}€</label>
+          </div>
+          <div>
+              <label>Frais de service : {{r.bill.service}}€</label>
+          </div>
+          <div>
+              <label>Total : {{r.bill.service + r.bill.cleaning}}€</label>
+          </div>
+        </mat-card-content>
+      </mat-card>
+  </mat-grid-tile>
+  </mat-grid-list>
 </div>
