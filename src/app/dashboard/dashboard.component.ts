@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   displayNewRentForm : boolean;
+  displayUpdateRentForm : boolean;
   displayBillCard : boolean;
   displayBillCardAdmin: boolean;
   cleaningChecked : boolean = true;
@@ -61,6 +62,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.displayNewRentForm = false;
+    this.displayUpdateRentForm = false;
     this.displayBillCard = false;
     this.displayBillCardAdmin = false;
     this.getRenter();
@@ -76,7 +78,25 @@ export class DashboardComponent implements OnInit {
   addNewRent() {
     this.displayBillCard = false;
     this.displayBillCardAdmin = false;
+    this.displayUpdateRentForm = false;
     this.displayNewRentForm = true;
+  }
+
+  displayUpdateRent(rent : Rent): void {
+    this.rent = rent ;
+    this.displayBillCard = false;
+    this.displayBillCardAdmin = false;
+    this.displayNewRentForm = false;
+    this.displayUpdateRentForm = true;
+  }
+
+  updateRent() {
+    this.displayUpdateRentForm = false;
+    let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
+    this.dashboardService.updateRent(rentValue, this.renter.id).subscribe(data => {
+      this.getRents(this.renter.id);
+      this.getRenter();
+    });
   }
 
   saveNewRent() {
@@ -132,6 +152,7 @@ export class DashboardComponent implements OnInit {
           this.getRenter();
           this.displayBillCard = false;
           this.displayNewRentForm = false;
+          this.displayUpdateRentForm = false;
         });
       }
     });
@@ -181,6 +202,7 @@ export class DashboardComponent implements OnInit {
 
   displayBill(): void {
     this.displayNewRentForm = false;
+    this.displayUpdateRentForm = false;
     if (this.renter.admin == true) {
       this.displayBillCard = false;
       this.displayBillCardAdmin = true;

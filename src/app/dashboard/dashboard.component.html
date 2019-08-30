@@ -91,6 +91,9 @@
   <ng-container matColumnDef="Delete">
     <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
     <td mat-cell *matCellDef="let rent">
+        <button mat-icon-button (click)="displayUpdateRent(rent)">
+            <mat-icon>edit</mat-icon>
+          </button>
       <button mat-icon-button (click)="deleteRent(rent.id)">
         <mat-icon>delete</mat-icon>
       </button>
@@ -205,6 +208,97 @@
     </mat-card-content>
   </mat-card>
 </div>
+<!-- UPDATE RENT-->
+<div *ngIf="displayUpdateRentForm == true">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title>Modifier location</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="newRentForm" (submit)="updateRent()">
+          <div>
+            <mat-form-field>
+              <mat-label>Appartement</mat-label>
+              <mat-select formControlName="appartment" [(ngModel)]="rent.appartment">
+                <mat-option *ngFor="let appartment of appartments" [(value)]="appartment">
+                  {{appartment}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Date d'entrée"  [value]="rent.period.startDate" required>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput placeholder="Heure d'entrée" [ngxTimepicker]="fullTime" [format]="24" [value]="'15:00'"
+                formControlName="startTime" readonly>
+              <ngx-material-timepicker #fullTime></ngx-material-timepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput [matDatepicker]="pickerEnd" formControlName="endDate" placeholder="Date de sortie" [value]="rent.period.endDate" required>
+              <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+              <mat-datepicker #pickerEnd></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput placeholder="Heure de sortie" [ngxTimepicker]="fullEndTime" [format]="24" [value]="'11:00'"
+                formControlName="endTime" readonly>
+              <ngx-material-timepicker #fullEndTime></ngx-material-timepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="client" placeholder="Locataire" [value]="rent.client.name" required />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="phoneNumber" placeholder="Téléphone" [value]="rent.client.phoneNumber" required />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="nbClient" placeholder="Nb Occupants" [value]="rent.nbClient" required />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-checkbox color="primary" formControlName="cleaning" [(ngModel)]="rent.cleaning" required>Ménage
+            </mat-checkbox>
+          </div>
+          <div>
+            <mat-checkbox color="primary" formControlName="parking" [(ngModel)]="rent.parking" required>Parking
+            </mat-checkbox>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="site" placeholder="Site" [value]="rent.site" required />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="price" placeholder="Prix" [value]="rent.price" required />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <textarea matInput formControlName="comments" placeholder="Commentaires" cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [value]="rent.comments"></textarea>
+            </mat-form-field>
+          </div>
+          <button mat-raised-button type="Save">Save</button>
+          <button mat-raised-button (click)="cancelNewRent()">Cancel</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 <div *ngIf="displayBillCard == true">
   <mat-card class="card">
     <mat-card-header style="justify-content: center; ">

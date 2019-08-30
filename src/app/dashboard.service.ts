@@ -27,6 +27,11 @@ export class DashboardService {
 
  /** PUT PAY rent */
  payRent(rent: Rent): Observable<Rent> {
+  return this.http.put<Rent>(this.grisonskyURL + '/rent/pay',rent);
+} 
+
+/** PUT PAY rent */
+updateRent(rent: Rent): Observable<Rent> {
   return this.http.put<Rent>(this.grisonskyURL + '/rent',rent);
 } 
 
