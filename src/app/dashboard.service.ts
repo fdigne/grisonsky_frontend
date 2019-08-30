@@ -26,13 +26,13 @@ export class DashboardService {
   }
 
  /** PUT PAY rent */
- payRent(rent: Rent): Observable<Rent> {
-  return this.http.put<Rent>(this.grisonskyURL + '/rent/pay',rent);
+ payRent(rent: Rent, userId: number): Observable<Rent> {
+  return this.http.put<Rent>(this.grisonskyURL + '/rent/pay/'+userId,rent);
 } 
 
-/** PUT PAY rent */
-updateRent(rent: Rent): Observable<Rent> {
-  return this.http.put<Rent>(this.grisonskyURL + '/rent',rent);
+/** PUT Update rent */
+updateRent(rent: Rent, userId: number): Observable<Rent> {
+  return this.http.put<Rent>(this.grisonskyURL + '/rent/'+userId,rent);
 } 
 
   /** GET renters */

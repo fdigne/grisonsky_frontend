@@ -90,9 +90,10 @@ export class DashboardComponent implements OnInit {
     this.displayUpdateRentForm = true;
   }
 
-  updateRent() {
+  updateRent(rentId: number) {
     this.displayUpdateRentForm = false;
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
+    rentValue.id = rentId;
     this.dashboardService.updateRent(rentValue, this.renter.id).subscribe(data => {
       this.getRents(this.renter.id);
       this.getRenter();
@@ -214,7 +215,7 @@ export class DashboardComponent implements OnInit {
   }
 
   payRent(rent: Rent): void {
-    this.dashboardService.payRent(rent).subscribe(rent => {
+    this.dashboardService.payRent(rent, this.renter.id).subscribe(rent => {
       this.getRenter();
     })
   }
