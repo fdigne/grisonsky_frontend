@@ -10,13 +10,16 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { Modification } from '../domains/Modification';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [DashboardService]
+  providers: [DashboardService,
+              DatePipe
+             ]
 })
 
 export class DashboardComponent implements OnInit {
@@ -28,6 +31,8 @@ export class DashboardComponent implements OnInit {
   renter: Renter;
   appartments: String[];
   lastModification: Modification;
+  rentStartTime: String
+  rentEndTime: String
 
   dataSource: MatTableDataSource<Rent> = new MatTableDataSource();
   
@@ -41,7 +46,7 @@ export class DashboardComponent implements OnInit {
   parkingChecked : boolean = false;
   displayLastModifMessage : boolean = false;
 
-  constructor(private dashboardService: DashboardService, fb: FormBuilder, public dialog: MatDialog) { 
+  constructor(private dashboardService: DashboardService, fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe) { 
     this.newRentForm = fb.group({
       appartment: ["", Validators.required],
       renter: ["", Validators.required],
@@ -84,6 +89,10 @@ export class DashboardComponent implements OnInit {
 
   displayUpdateRent(rent : Rent): void {
     this.rent = rent ;
+    this.rent.period.startDate = new Date(rent.period.startDate);
+    this.rent.period.endDate = new Date(rent.period.endDate);
+    this.rentStartTime = this.datePipe.transform(this.rent.period.startDate, 'HH:mm');
+    this.rentEndTime = this.datePipe.transform(this.rent.period.endDate, 'HH:mm');
     this.displayBillCard = false;
     this.displayBillCardAdmin = false;
     this.displayNewRentForm = false;
@@ -115,8 +124,10 @@ export class DashboardComponent implements OnInit {
     let clientValue = new Client();
 
     //Period values
-    periodValue.startDate = new Date(form.startDate + ' ' + form.startTime);
-    periodValue.endDate = new Date(form.endDate + ' ' + form.endTime);
+    periodValue.startDate = new Date(form.startDate);
+    periodValue.startDate.setHours(parseInt(form.startTime.split(':')[0]), parseInt(form.startTime.split(':')[1]));
+    periodValue.endDate = new Date(form.endDate);
+    periodValue.endDate.setHours(parseInt(form.endTime.split(':')[0]), parseInt(form.endTime.split(':')[1]));
 
     //Client values
     clientValue.name = form.client;
@@ -164,8 +175,10 @@ export class DashboardComponent implements OnInit {
       this.dataSource = new MatTableDataSource(rents);
       this.dataSource.sortingDataAccessor = (item, property) => {
         switch (property) {
-          case 'startDate': return new Date(item.period.startDate);
-          case 'endDate': return new Date(item.period.endDate);
+          case 'startDate': return this.datePipe.transform(item.period.startDate, 'dd-MM-yyyy');
+          case 'endDate': return this.datePipe.transform(item.period.endDate, 'dd-MM-yyyy');
+          case 'startTime': return this.datePipe.transform(item.period.startDate, 'HH:mm');
+          case 'endTime': return this.datePipe.transform(item.period.endDate, 'HH:mm');
           case 'renter': return item.renter.name;
           case 'client': return item.client.name;
           default: return item[property];
@@ -194,10 +207,10 @@ export class DashboardComponent implements OnInit {
 
   getDisplayedColumns(): void {
     if (this.renter.admin == true) {
-      this.displayedColumns = ['startDate', 'endDate','renter', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
+      this.displayedColumns = ['startDate', 'startTime', 'endDate', 'endTime', 'renter', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
     }
     else {
-      this.displayedColumns = ['startDate', 'endDate', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
+      this.displayedColumns = ['startDate', 'startTime', 'endDate', 'endTime', 'appartment', 'client', 'phoneNumber', 'nbClient', 'cleaning', 'parking', 'site', 'price', 'comments', 'Delete'];
     }
   }
 
