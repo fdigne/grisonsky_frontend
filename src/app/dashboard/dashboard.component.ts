@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit {
     this.getRenter();
     this.dataSource.sort = this.sort;
   }
+
   getLastModification() {
     this.dashboardService.getLastModification().subscribe(modification => {
       modification.date = new Date(modification.date);
@@ -172,6 +173,7 @@ export class DashboardComponent implements OnInit {
   }
   getRents(renterId : number): void {
     this.dashboardService.getRents(renterId).subscribe(rents => {
+      this.rents = rents
       this.dataSource = new MatTableDataSource(rents);
       this.dataSource.sortingDataAccessor = (item, property) => {
         switch (property) {
@@ -185,9 +187,21 @@ export class DashboardComponent implements OnInit {
         }
       };
       this.dataSource.sort = this.sort;
-      this.rents = rents
       this.getLastModification();
     });
+  }
+
+  getYearRents(): void {
+    this.dashboardService.getRentsByDate(this.renter.id, new Date().getFullYear()).subscribe(rents => {
+      this.rents = rents;
+    });
+  }
+
+  getFutureRents(): void {
+    this.dashboardService.getFutureRents(this.renter.id).subscribe(rents => {
+      this.rents = rents;
+      console.log(rents);
+    })
   }
 
   getRenter(): void {

@@ -17,7 +17,17 @@ export class DashboardService {
 
   /** GET rents */
   getRents(renterId: number): Observable<Rent[]> {
-    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/all/'+renterId)
+    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/all/'+renterId);
+  }
+
+  /** GET rents with date parameters */
+  getRentsByDate(renterId: number, date: number) {
+    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/'+renterId+'/'+date);
+  }
+
+  /** GET rents */
+  getFutureRents(renterId: number): Observable<Rent[]> {
+    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/future/'+renterId);
   }
 
   /** GET renter */

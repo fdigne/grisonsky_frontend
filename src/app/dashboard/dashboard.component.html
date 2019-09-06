@@ -7,6 +7,10 @@
 <mat-form-field>
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
+<br/>
+<div>
+<button mat-button (click)="getRents()">Tout</button><button mat-button (click)=getYearRents()>Année en cours</button><button mat-button (click)=getFutureRents()>Locations futures</button>
+</div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
