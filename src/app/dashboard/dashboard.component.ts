@@ -31,8 +31,12 @@ export class DashboardComponent implements OnInit {
   renter: Renter;
   appartments: String[];
   lastModification: Modification;
-  rentStartTime: String
-  rentEndTime: String
+  rentStartTime: String;
+  rentEndTime: String;
+  currentYearRents: boolean;
+  allRents: boolean;
+  futureRents: boolean;
+  currentDate: Date;
 
   dataSource: MatTableDataSource<Rent> = new MatTableDataSource();
   
@@ -70,6 +74,10 @@ export class DashboardComponent implements OnInit {
     this.displayUpdateRentForm = false;
     this.displayBillCard = false;
     this.displayBillCardAdmin = false;
+    this.currentYearRents = true;
+    this.allRents = false;
+    this.futureRents = false;
+    this.currentDate = new Date();
     this.getRenter();
     this.dataSource.sort = this.sort;
   }
@@ -172,7 +180,7 @@ export class DashboardComponent implements OnInit {
     
   }
   getRents(renterId : number): void {
-    this.dashboardService.getRents(renterId).subscribe(rents => {
+      this.dashboardService.getRents(renterId).subscribe(rents => {
       this.rents = rents
       this.dataSource = new MatTableDataSource(rents);
       this.dataSource.sortingDataAccessor = (item, property) => {
@@ -191,17 +199,21 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getAllRents(): void {
+    this.currentYearRents = false;
+    this.allRents = true;
+    this.futureRents = false;
+  }
   getYearRents(): void {
-    this.dashboardService.getRentsByDate(this.renter.id, new Date().getFullYear()).subscribe(rents => {
-      this.rents = rents;
-    });
+    this.currentYearRents = true;
+    this.allRents = false;
+    this.futureRents = false;
   }
 
   getFutureRents(): void {
-    this.dashboardService.getFutureRents(this.renter.id).subscribe(rents => {
-      this.rents = rents;
-      console.log(rents);
-    })
+    this.currentYearRents = false;
+    this.allRents = false;
+    this.futureRents = true;
   }
 
   getRenter(): void {
@@ -250,4 +262,9 @@ export class DashboardComponent implements OnInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  isDisplayed(rent: Rent): boolean{
+    return (this.allRents || (this.futureRents && (rent.period.startDate>= this.currentDate || rent.period.endDate>= this.currentDate ))
+            || this.currentYearRents && (rent.period.startDate.getFullYear == this.currentDate.getFullYear || rent.period.endDate.getFullYear == this.currentDate.getFullYear));
+          }
 }

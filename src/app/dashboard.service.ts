@@ -20,16 +20,6 @@ export class DashboardService {
     return this.http.get<Rent[]>(this.grisonskyURL + '/rent/all/'+renterId);
   }
 
-  /** GET rents with date parameters */
-  getRentsByDate(renterId: number, date: number) {
-    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/'+renterId+'/'+date);
-  }
-
-  /** GET rents */
-  getFutureRents(renterId: number): Observable<Rent[]> {
-    return this.http.get<Rent[]>(this.grisonskyURL + '/rent/future/'+renterId);
-  }
-
   /** GET renter */
   getRenter(name : String): Observable<Renter> {
     return this.http.get<Renter>(this.grisonskyURL + '/renter/'+name);
