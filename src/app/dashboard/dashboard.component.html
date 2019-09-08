@@ -11,6 +11,7 @@
 <div>
 <button mat-button (click)="getAllRents()" [disabled]="allRents">Tout</button><button mat-button (click)=getYearRents() [disabled]="currentYearRents">Année en cours</button><button mat-button (click)=getFutureRents() [disabled]="futureRents">Locations futures</button>
 </div>
+<div *ngIf="!waitingSpinner">
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
@@ -124,6 +125,13 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="!isDisplayed(row)"></tr>
 </table>
+</div>
+<div *ngIf="waitingSpinner" >
+  <mat-progress-spinner 
+    color="primary" 
+    mode="indeterminate" style="margin:0 auto;">
+  </mat-progress-spinner>
+</div>
 <br />
 <div>
   <button mat-fab color="primary" (click)="addNewRent()" type="button">

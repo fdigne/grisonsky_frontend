@@ -38,6 +38,8 @@ export class DashboardComponent implements OnInit {
   futureRents: boolean;
   currentDate: Date;
 
+  waitingSpinner: boolean
+
   dataSource: MatTableDataSource<Rent> = new MatTableDataSource();
   
   displayedColumns: string[];
@@ -70,6 +72,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.waitingSpinner = true;
     this.displayNewRentForm = false;
     this.displayUpdateRentForm = false;
     this.displayBillCard = false;
@@ -109,6 +112,7 @@ export class DashboardComponent implements OnInit {
   }
 
   updateRent(rentId: number) {
+    this.waitingSpinner = true;
     this.displayUpdateRentForm = false;
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
     rentValue.id = rentId;
@@ -119,6 +123,7 @@ export class DashboardComponent implements OnInit {
   }
 
   saveNewRent() {
+    this.waitingSpinner = true ;
     this.displayNewRentForm = false;
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
     this.dashboardService.saveRent(rentValue, this.renter.id).subscribe(data => {
@@ -134,9 +139,9 @@ export class DashboardComponent implements OnInit {
 
     //Period values
     periodValue.startDate = new Date(form.startDate);
-    periodValue.startDate.setHours(parseInt(form.startTime.split(':')[0]), parseInt(form.startTime.split(':')[1]));
+    periodValue.startDate.setHours(parseInt(form.startTime != null?form.startTime.split(':')[0]:'15'), parseInt(form.startTime != null?form.startTime.split(':')[1]:'00'));
     periodValue.endDate = new Date(form.endDate);
-    periodValue.endDate.setHours(parseInt(form.endTime.split(':')[0]), parseInt(form.endTime.split(':')[1]));
+    periodValue.endDate.setHours(parseInt(form.endTime != null?form.endTime.split(':')[0]:'11'), parseInt(form.endTime!= null?form.endTime.split(':')[1]:'00'));
 
     //Client values
     clientValue.name = form.client;
@@ -168,6 +173,7 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
+        this.waitingSpinner = true;
         this.dashboardService.deleteRent(rentId, this.renter.id).subscribe(() => {
           this.getRents(this.renter.id);
           this.getRenter();
@@ -226,6 +232,7 @@ export class DashboardComponent implements OnInit {
       if (renter.admin == true) {
         this.dashboardService.getRenters(renter).subscribe(renters => {
           this.renters = renters;
+          this.waitingSpinner = false;
         });
       }
     });

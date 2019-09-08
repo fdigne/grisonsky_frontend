@@ -24,6 +24,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { LoginComponent } from './login/login.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 export const MY_FORMAT: MatDateFormats = {
   parse: {
@@ -65,7 +66,8 @@ export const MY_FORMAT: MatDateFormats = {
     MatSortModule,
     MatCheckboxModule,
     MatToolbarModule,
-    MatGridListModule
+    MatGridListModule,
+    MatProgressSpinnerModule
   ],
   entryComponents: [
     ConfirmationDialogComponent
