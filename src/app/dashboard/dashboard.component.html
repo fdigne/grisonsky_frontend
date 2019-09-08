@@ -9,7 +9,7 @@
 </mat-form-field>
 <br/>
 <div>
-<button mat-button (click)="getAllRents()">Tout</button><button mat-button (click)=getYearRents()>Année en cours</button><button mat-button (click)=getFutureRents()>Locations futures</button>
+<button mat-button (click)="getAllRents()" [disabled]="allRents">Tout</button><button mat-button (click)=getYearRents() [disabled]="currentYearRents">Année en cours</button><button mat-button (click)=getFutureRents() [disabled]="futureRents">Locations futures</button>
 </div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
@@ -122,7 +122,7 @@
 
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="isDisplayed(row)"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="!isDisplayed(row)"></tr>
 </table>
 <br />
 <div>

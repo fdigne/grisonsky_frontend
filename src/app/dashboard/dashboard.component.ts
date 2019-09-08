@@ -264,7 +264,9 @@ export class DashboardComponent implements OnInit {
   }
 
   isDisplayed(rent: Rent): boolean{
-    return (this.allRents || (this.futureRents && (rent.period.startDate>= this.currentDate || rent.period.endDate>= this.currentDate ))
-            || this.currentYearRents && (rent.period.startDate.getFullYear == this.currentDate.getFullYear || rent.period.endDate.getFullYear == this.currentDate.getFullYear));
+    let startDate = new Date(rent.period.startDate);
+    let endDate = new Date(rent.period.endDate);
+    return (this.allRents || (this.futureRents && (startDate.getTime() >= this.currentDate.getTime() || endDate.getTime() >= this.currentDate.getTime()))
+            || (this.currentYearRents && (startDate.getFullYear() === this.currentDate.getFullYear() || endDate.getFullYear() === this.currentDate.getFullYear())));
           }
 }
