@@ -83,6 +83,7 @@ export class DashboardComponent implements OnInit {
     this.currentDate = new Date();
     this.getRenter();
     this.dataSource.sort = this.sort;
+    this.waitingSpinner = false;
   }
 
   getLastModification() {
@@ -100,6 +101,7 @@ export class DashboardComponent implements OnInit {
   }
 
   displayUpdateRent(rent : Rent): void {
+    this.newRentForm.reset();
     this.rent = rent ;
     this.rent.period.startDate = new Date(rent.period.startDate);
     this.rent.period.endDate = new Date(rent.period.endDate);
@@ -111,11 +113,12 @@ export class DashboardComponent implements OnInit {
     this.displayUpdateRentForm = true;
   }
 
-  updateRent(rentId: number) {
+  updateRent(rent: Rent) {
     this.waitingSpinner = true;
     this.displayUpdateRentForm = false;
-    let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
-    rentValue.id = rentId;
+    this.rent = rent;
+    let rentValue : Rent = this.getRentFromForm(this.newRentForm.value, rent);
+    rentValue.id = rent.id;
     this.dashboardService.updateRent(rentValue, this.renter.id).subscribe(data => {
       this.getRents(this.renter.id);
       this.getRenter();
@@ -125,39 +128,40 @@ export class DashboardComponent implements OnInit {
   saveNewRent() {
     this.waitingSpinner = true ;
     this.displayNewRentForm = false;
-    let rentValue : Rent = this.getRentFromForm(this.newRentForm.value);
+    let rentValue : Rent = this.getRentFromForm(this.newRentForm.value, new Rent());
     this.dashboardService.saveRent(rentValue, this.renter.id).subscribe(data => {
       this.getRents(this.renter.id);
       this.getRenter();
+      this.waitingSpinner = false;
     });
   }
 
-  getRentFromForm(form : any) : Rent {
+  getRentFromForm(form : any, rent : Rent) : Rent {
     let rentValue = new Rent();
     let periodValue = new Period();
     let clientValue = new Client();
 
     //Period values
-    periodValue.startDate = new Date(form.startDate);
+    periodValue.startDate = form.startDate !== null ?new Date(form.startDate) : rent.period.startDate;
     periodValue.startDate.setHours(parseInt(form.startTime != null?form.startTime.split(':')[0]:'15'), parseInt(form.startTime != null?form.startTime.split(':')[1]:'00'));
-    periodValue.endDate = new Date(form.endDate);
+    periodValue.endDate = form.endDate !== null ? new Date(form.endDate) : rent.period.endDate;
     periodValue.endDate.setHours(parseInt(form.endTime != null?form.endTime.split(':')[0]:'11'), parseInt(form.endTime!= null?form.endTime.split(':')[1]:'00'));
 
     //Client values
-    clientValue.name = form.client;
-    clientValue.phoneNumber = form.phoneNumber;
+    clientValue.name = form.client !== null ? form.client:rent.client.name;
+    clientValue.phoneNumber = form.phoneNumber !== null ? form.phoneNumber : rent.client.phoneNumber;
 
     //Rent values
     rentValue.client = clientValue;
     rentValue.period = periodValue;
     rentValue.renter = this.renter;
-    rentValue.appartment = form.appartment;
-    rentValue.cleaning = form.cleaning;
-    rentValue.comments = form.comments;
-    rentValue.nbClient = form.nbClient;
-    rentValue.parking = form.parking;
-    rentValue.price = form.price;
-    rentValue.site = form.site;
+    rentValue.appartment = form.appartment !== null ? form.appartment : rent.appartment;
+    rentValue.cleaning = form.cleaning !== null ? form.cleaning : rent.cleaning;
+    rentValue.comments = form.comments !== null ? form.comments : rent.comments;
+    rentValue.nbClient = form.nbClient !== null ? form.nbClient : rent.nbClient;
+    rentValue.parking = form.parking !== null ? form.parking : rent.parking;
+    rentValue.price = form.price !== null ? form.price : rent.price;
+    rentValue.site = form.site !== null ? form.site : rent.site;
     return rentValue;
   }
 
@@ -199,6 +203,25 @@ export class DashboardComponent implements OnInit {
           case 'client': return item.client.name;
           default: return item[property];
         }
+      };
+      this.dataSource.filterPredicate = (order: Rent, filter: string) => {
+        const transformedFilter = filter.trim().toLowerCase();
+      
+        const listAsFlatString = (obj): string => {
+          let returnVal = '';
+      
+          Object.values(obj).forEach((val) => {
+            if (typeof val !== 'object') {
+              returnVal = returnVal + ' ' + val;
+            } else if (val !== null) {
+              returnVal = returnVal + ' ' + listAsFlatString(val);
+            }
+          });
+      
+          return returnVal.trim().toLowerCase();
+        };
+      
+        return listAsFlatString(order).includes(transformedFilter);
       };
       this.dataSource.sort = this.sort;
       this.getLastModification();
