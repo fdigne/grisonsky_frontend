@@ -52,14 +52,16 @@ export class DashboardComponent implements OnInit {
   parkingChecked : boolean = false;
   displayLastModifMessage : boolean = false;
 
-  constructor(private dashboardService: DashboardService, fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe) { 
-    this.newRentForm = fb.group({
+  constructor(private dashboardService: DashboardService, public fb: FormBuilder, public dialog: MatDialog, private datePipe: DatePipe) {
+  }
+
+  ngOnInit() {
+    this.newRentForm = this.fb.group({
       appartment: ["", Validators.required],
-      renter: ["", Validators.required],
       startDate: ["", Validators.required],
-      startTime: ["", Validators.required],
+      startTime: ["", null],
       endDate: ["", Validators.required],
-      endTime: ["", Validators.required],
+      endTime: ["", null],
       client: ["", Validators.required],
       phoneNumber: ["", Validators.required],
       nbClient: ["", Validators.required],
@@ -67,11 +69,8 @@ export class DashboardComponent implements OnInit {
       parking: ["", Validators.required],
       site: ["", Validators.required],
       price: ["", Validators.required],
-      comments: ["", Validators.required]
+      comments: ["", null]
   });
-  }
-
-  ngOnInit() {
     this.waitingSpinner = true;
     this.displayNewRentForm = false;
     this.displayUpdateRentForm = false;
@@ -125,15 +124,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  saveNewRent() {
-    this.waitingSpinner = true ;
-    this.displayNewRentForm = false;
-    let rentValue : Rent = this.getRentFromForm(this.newRentForm.value, new Rent());
-    this.dashboardService.saveRent(rentValue, this.renter.id).subscribe(data => {
-      this.getRents(this.renter.id);
-      this.getRenter();
-      this.waitingSpinner = false;
-    });
+  saveNewRent(newRentForm : FormGroup) {
+    if (newRentForm.valid){
+      this.waitingSpinner = true ;
+      this.displayNewRentForm = false;
+      let rentValue : Rent = this.getRentFromForm(newRentForm.value, new Rent());
+      this.dashboardService.saveRent(rentValue, this.renter.id).subscribe(data => {
+        this.getRents(this.renter.id);
+        this.getRenter();
+        this.waitingSpinner = false;
+      });
+    }
+    else {
+      console.log("Problème sur le formulaire de saisie")
+    }
   }
 
   getRentFromForm(form : any, rent : Rent) : Rent {
@@ -143,9 +147,15 @@ export class DashboardComponent implements OnInit {
 
     //Period values
     periodValue.startDate = form.startDate !== null ?new Date(form.startDate) : rent.period.startDate;
-    periodValue.startDate.setHours(parseInt(form.startTime != null?form.startTime.split(':')[0]:'15'), parseInt(form.startTime != null?form.startTime.split(':')[1]:'00'));
+    form.startTime != null ?periodValue.startDate.setHours(parseInt(form.startTime.split(':')[0])):periodValue.startDate.setHours(15);
+    if (form.startTime != null && parseInt(form.startTime.split(':')[1]) != 0) {
+      periodValue.startDate.setMinutes(parseInt(form.startTime.split(':')[1]))
+    }
     periodValue.endDate = form.endDate !== null ? new Date(form.endDate) : rent.period.endDate;
-    periodValue.endDate.setHours(parseInt(form.endTime != null?form.endTime.split(':')[0]:'11'), parseInt(form.endTime!= null?form.endTime.split(':')[1]:'00'));
+    form.endTime != null ?periodValue.endDate.setHours(parseInt(form.endTime.split(':')[0])):periodValue.endDate.setHours(15);
+    if (form.endTime != null && parseInt(form.endTime.split(':')[1]) != 0) {
+      periodValue.endDate.setMinutes(parseInt(form.endTime.split(':')[1]))
+    }
 
     //Client values
     clientValue.name = form.client !== null ? form.client:rent.client.name;
@@ -162,6 +172,8 @@ export class DashboardComponent implements OnInit {
     rentValue.parking = form.parking !== null ? form.parking : rent.parking;
     rentValue.price = form.price !== null ? form.price : rent.price;
     rentValue.site = form.site !== null ? form.site : rent.site;
+    console.log("//////////////")
+    console.log(rentValue)
     return rentValue;
   }
 

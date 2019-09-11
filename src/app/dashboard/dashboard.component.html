@@ -148,7 +148,7 @@
       <mat-card-title>Nouvelle location</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="newRentForm" (submit)="saveNewRent()">
+      <form [formGroup]="newRentForm" (ngSubmit)="saveNewRent(newRentForm)">
         <div>
           <mat-form-field>
             <mat-label>Appartement</mat-label>
@@ -161,7 +161,7 @@
         </div>
         <div>
           <mat-form-field>
-            <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Date d'entrée" required>
+            <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Date d'entrée"  readonly>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -175,7 +175,7 @@
         </div>
         <div>
           <mat-form-field>
-            <input matInput [matDatepicker]="pickerEnd" formControlName="endDate" placeholder="Date de sortie" required>
+            <input matInput [matDatepicker]="pickerEnd" formControlName="endDate" placeholder="Date de sortie"  readonly>
             <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
             <mat-datepicker #pickerEnd></mat-datepicker>
           </mat-form-field>
@@ -189,35 +189,35 @@
         </div>
         <div>
           <mat-form-field>
-            <input matInput formControlName="client" placeholder="Locataire" required />
+            <input matInput formControlName="client" placeholder="Locataire"  />
           </mat-form-field>
         </div>
         <div>
           <mat-form-field>
-            <input matInput formControlName="phoneNumber" placeholder="Téléphone" required />
+            <input matInput formControlName="phoneNumber" placeholder="Téléphone"  />
           </mat-form-field>
         </div>
         <div>
           <mat-form-field>
-            <input matInput formControlName="nbClient" placeholder="Nb Occupants" required />
+            <input matInput formControlName="nbClient" placeholder="Nb Occupants"  />
           </mat-form-field>
         </div>
         <div>
-          <mat-checkbox color="primary" [(ngModel)]="cleaningChecked" formControlName="cleaning" required>Ménage
+          <mat-checkbox color="primary" [(ngModel)]="cleaningChecked" formControlName="cleaning" >Ménage
           </mat-checkbox>
         </div>
         <div>
-          <mat-checkbox color="primary" [(ngModel)]="parkingChecked" formControlName="parking" required>Parking
+          <mat-checkbox color="primary" [(ngModel)]="parkingChecked" formControlName="parking" >Parking
           </mat-checkbox>
         </div>
         <div>
           <mat-form-field>
-            <input matInput formControlName="site" placeholder="Site" required />
+            <input matInput formControlName="site" placeholder="Site"/>
           </mat-form-field>
         </div>
         <div>
           <mat-form-field>
-            <input matInput formControlName="price" placeholder="Prix" required />
+            <input matInput formControlName="price" placeholder="Prix"/>
           </mat-form-field>
         </div>
         <div>
@@ -226,7 +226,7 @@
               #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
         </div>
-        <button mat-raised-button type="Save">Save</button>
+        <button mat-raised-button type="submit">Save</button>
         <button mat-raised-button (click)="cancelNewRent()">Cancel</button>
       </form>
     </mat-card-content>
@@ -253,7 +253,7 @@
         <div>
           <mat-form-field>
             <input matInput [matDatepicker]="picker" formControlName="startDate" placeholder="Date d'entrée"
-              [value]="rent.period.startDate" required>
+              [value]="rent.period.startDate" required readonly>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -268,7 +268,7 @@
         <div>
           <mat-form-field>
             <input matInput [matDatepicker]="pickerEnd" formControlName="endDate" placeholder="Date de sortie"
-              [value]="rent.period.endDate" required>
+              [value]="rent.period.endDate" required readonly>
             <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
             <mat-datepicker #pickerEnd></mat-datepicker>
           </mat-form-field>
