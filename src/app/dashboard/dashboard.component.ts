@@ -147,13 +147,24 @@ export class DashboardComponent implements OnInit {
 
     //Period values
     periodValue.startDate = form.startDate !== null ?new Date(form.startDate) : rent.period.startDate;
-    form.startTime != null ?periodValue.startDate.setHours(parseInt(form.startTime.split(':')[0])):periodValue.startDate.setHours(15);
-    if (form.startTime != null && parseInt(form.startTime.split(':')[1]) != 0) {
+    console.log(form.startTime)
+    if (form.startTime != null && form.startTime != '') {
+      periodValue.startDate.setHours(parseInt(form.startTime.split(':')[0]));
+    }
+    else {
+      periodValue.startDate.setHours(15);
+    }
+    if (form.startTime != null && form.startTime != '' && parseInt(form.startTime.split(':')[1]) != 0) {
       periodValue.startDate.setMinutes(parseInt(form.startTime.split(':')[1]))
     }
-    periodValue.endDate = form.endDate !== null ? new Date(form.endDate) : rent.period.endDate;
-    form.endTime != null ?periodValue.endDate.setHours(parseInt(form.endTime.split(':')[0])):periodValue.endDate.setHours(15);
-    if (form.endTime != null && parseInt(form.endTime.split(':')[1]) != 0) {
+    periodValue.endDate = form.endDate !== null ? new Date(form.endDate) : new Date(rent.period.endDate);
+    if (form.endTime != null && form.endTime != '') {
+      periodValue.endDate.setHours(parseInt(form.endTime.split(':')[0]));
+    }
+    else {
+      periodValue.endDate.setHours(11);
+    }
+    if (form.endTime != null && form.endTime != '' && parseInt(form.endTime.split(':')[1]) != 0) {
       periodValue.endDate.setMinutes(parseInt(form.endTime.split(':')[1]))
     }
 
@@ -172,8 +183,7 @@ export class DashboardComponent implements OnInit {
     rentValue.parking = form.parking !== null ? form.parking : rent.parking;
     rentValue.price = form.price !== null ? form.price : rent.price;
     rentValue.site = form.site !== null ? form.site : rent.site;
-    console.log("//////////////")
-    console.log(rentValue)
+    
     return rentValue;
   }
 
