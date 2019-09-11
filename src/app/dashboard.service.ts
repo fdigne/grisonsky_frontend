@@ -10,7 +10,7 @@ import { Login } from './domains/Login';
 @Injectable()
 export class DashboardService {
 
-  private grisonskyURL = 'http://localhost:9090';  // URL to web api
+  private grisonskyURL = 'http://193.70.89.80';  // URL to web api
 
   constructor(
     private http: HttpClient) { }
