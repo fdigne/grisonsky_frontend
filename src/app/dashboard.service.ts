@@ -10,7 +10,7 @@ import { Login } from './domains/Login';
 @Injectable()
 export class DashboardService {
 
-  private grisonskyURL = 'http://vps513398.ovh.net:8080';  // URL to web api
+  private grisonskyURL = 'http://193.70.89.80:9090';  // URL to web api
 
   constructor(
     private http: HttpClient) { }

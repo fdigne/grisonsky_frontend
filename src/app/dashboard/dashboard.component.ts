@@ -121,6 +121,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.updateRent(rentValue, this.renter.id).subscribe(data => {
       this.getRents(this.renter.id);
       this.getRenter();
+      this.waitingSpinner = false;
     });
   }
 
@@ -206,6 +207,7 @@ export class DashboardComponent implements OnInit {
           this.displayBillCard = false;
           this.displayNewRentForm = false;
           this.displayUpdateRentForm = false;
+          this.waitingSpinner = false;
         });
       }
     });
