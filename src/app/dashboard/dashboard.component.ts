@@ -113,15 +113,14 @@ export class DashboardComponent implements OnInit {
   }
 
   updateRent(rent: Rent) {
-    this.waitingSpinner = true;
+    //this.waitingSpinner = true;
     this.displayUpdateRentForm = false;
     this.rent = rent;
     let rentValue : Rent = this.getRentFromForm(this.newRentForm.value, rent);
     rentValue.id = rent.id;
     this.dashboardService.updateRent(rentValue, this.renter.id).subscribe(data => {
-      this.getRents(this.renter.id);
+      //this.getRents(this.renter.id);
       this.getRenter();
-      this.waitingSpinner = false;
     });
   }
 
@@ -148,7 +147,6 @@ export class DashboardComponent implements OnInit {
 
     //Period values
     periodValue.startDate = form.startDate !== null ?new Date(form.startDate) : rent.period.startDate;
-    console.log(form.startTime)
     if (form.startTime != null && form.startTime != '') {
       periodValue.startDate.setHours(parseInt(form.startTime.split(':')[0]));
     }
@@ -200,9 +198,9 @@ export class DashboardComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.waitingSpinner = true;
+        //this.waitingSpinner = true;
         this.dashboardService.deleteRent(rentId, this.renter.id).subscribe(() => {
-          this.getRents(this.renter.id);
+         // this.getRents(this.renter.id);
           this.getRenter();
           this.displayBillCard = false;
           this.displayNewRentForm = false;
@@ -250,6 +248,7 @@ export class DashboardComponent implements OnInit {
       this.dataSource.sort = this.sort;
       this.getLastModification();
     });
+    this.waitingSpinner = false;
   }
 
   getAllRents(): void {
@@ -282,7 +281,9 @@ export class DashboardComponent implements OnInit {
           this.waitingSpinner = false;
         });
       }
+      this.waitingSpinner = false;
     });
+    this.waitingSpinner = false;
   }
 
   getDisplayedColumns(): void {
